@@ -29,6 +29,8 @@ struct World {
     bus: Vec<(String, String, String, String)>,
     bus_cancels: Vec<String>,
     asked: Vec<(String, ToolSpec, Caller, RequestContext)>,
+    /// Apps the person gave command execution.
+    commands: BTreeSet<String>,
     /// The clock budgets count days by.
     now: u64,
 }
@@ -50,6 +52,7 @@ impl World {
             bus: Vec::new(),
             bus_cancels: Vec::new(),
             asked: Vec::new(),
+            commands: BTreeSet::new(),
             now: 1_000_000,
         }
     }
@@ -71,6 +74,9 @@ impl Env for World {
     }
     fn system_tools(&self) -> BTreeSet<String> {
         self.system.clone()
+    }
+    fn commands_granted(&self, app: &str) -> bool {
+        self.dev_all || self.commands.contains(app)
     }
     fn tool_rule(&self, _owner: &str, tool: &str) -> (bool, bool) {
         let command = tool == TERMINAL_RUN;
@@ -892,4 +898,31 @@ fn dev_runs_approval_is_a_command_developer_mode_answers_for_a_covered_app() {
         }
         assert_eq!(answers.lock().unwrap().as_slice(), if answered { &[true][..] } else { &[][..] });
     }
+}
+
+/// ADR 0004 §12: command execution is its own grant. A manifest's
+/// `terminal.run` alone (a cross-app grant) runs nothing: the call is
+/// refused, and not offered, until the person gave that app command
+/// execution.
+#[test]
+fn terminal_run_needs_the_persons_own_command_grant() {
+    let mut relay = Relay::default();
+    relay.catalog.grant("com.example.news", "terminal", TERMINAL_RUN);
+    let mut w = World::new(FixedDevMode::off());
+    let run = |id: &str| {
+        let mut c = call(id, TERMINAL_RUN, "com.example.news");
+        c.app = "terminal".into();
+        c.args = json!({"command": "ls"});
+        c
+    };
+    let (r, sent) = reply("t1");
+    relay.handle(Event::Call { call: run("t1"), reply: r }, &mut w);
+    assert_eq!(sent.lock().unwrap()[0]["error"]["kind"], "not_granted", "{:?}", sent.lock().unwrap());
+    assert!(w.bus.is_empty(), "nothing typed");
+    assert!(!super::relay::command_tools_offered(relay.catalog.offered("com.example.news", false, true), false).iter().any(|d| d["name"] == TERMINAL_RUN));
+    w.commands.insert("com.example.news".into());
+    let (r, _) = reply("t2");
+    relay.handle(Event::Call { call: run("t2"), reply: r }, &mut w);
+    assert_eq!(w.bus.len(), 1, "granted: it goes to the Terminal (its sheet still asks)");
+    assert!(super::relay::command_tools_offered(relay.catalog.offered("com.example.news", false, true), true).iter().any(|d| d["name"] == TERMINAL_RUN));
 }
