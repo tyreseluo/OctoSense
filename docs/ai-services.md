@@ -22,7 +22,7 @@ For the whole system around it (processes per platform, agents, protocols, tools
 
 | Piece | Status | Where |
 | --- | --- | --- |
-| One octos kernel per shell process, started on first use, restarted after a provider change | Works today (desktop with `OCTOS_APP_CORE_BIN`, Android, OpenHarmony; none on iOS) | [`crates/kernel`](../crates/kernel/README.md) |
+| One octos kernel per shell process, started on first use, restarted after a provider change | Works today (desktop with its packaged `octos-kernel` or `OCTOS_APP_CORE_BIN`, Android, OpenHarmony; none on iOS) | [`crates/kernel`](../crates/kernel/README.md) |
 | AI providers: the person's model providers and keys, keys only on host sheets | Works today | [`apps/ai-providers`](../apps/ai-providers/host-service/README.md) |
 | The shell's AI entry point (`start`, policy, per-instance offer, QR import) | Works today | [`crates/ai-host`](../crates/ai-host/README.md) |
 | Host-owned app peers: one octos peer per granted app, owned by the system agent | Works today, for native modules (Rinx) and, behind a switch, contained script apps | [`crates/app-peers`](../crates/app-peers/README.md), [Rinx ADR 0007](https://github.com/hagency-org/Rinx/blob/main/docs/adr/0007-host-owned-octos-app-peers.md) |
@@ -83,7 +83,7 @@ How it runs, by platform (`crates/kernel/src/launch.rs`, `KernelSource::platform
 
 | Platform | Kernel | Core dir (the octos home) |
 | --- | --- | --- |
-| Desktop (macOS; Windows and Linux untested) | `$OCTOS_APP_CORE_BIN serve --stdio --data-dir <core dir>` (plus `--config <core dir>/config.json` if present). **Without `OCTOS_APP_CORE_BIN` there is no kernel**, and a developer's own `octos serve` is never touched. Packaging the kernel next to the desktop binary is in progress ([#85](https://github.com/OctoSense-org/OctoSense/pull/85)). | `$OCTOS_APP_CORE_DIR`, else `<OctoSense state dir>/octos-home/.octos` (`~/.octosense/octos-home/.octos`): OctoSense's own, no longer the person's `~/octos-home/.octos`, whose provider settings it copies once |
+| Desktop (macOS; Windows and Linux untested) | `<kernel> serve --stdio --data-dir <core dir>` (plus `--config <core dir>/config.json` if present), where the kernel is `$OCTOS_APP_CORE_BIN`, else the packaged `octos-kernel` beside the shell, run only when its receipt names the pinned octos revision and its SHA-256 matches ([desktop/README.md, Build and run](../desktop/README.md#build-and-run)). **With neither there is no kernel**, and a developer's own `octos serve` is never touched. | `$OCTOS_APP_CORE_DIR`, else `<OctoSense state dir>/octos-home/.octos` (`~/.octosense/octos-home/.octos`): OctoSense's own, no longer the person's `~/octos-home/.octos`, whose provider settings it copies once |
 | Android (Home) | The APK's `liboctos.so serve --stdio`, built by [`tools/kernel-artifact.py`](../tools/kernel-artifact.py) from the octos revision the root `Cargo.toml` pins | `<app data dir>/octos-home/.octos` |
 | OpenHarmony | In process (`octos_cli::embedded::serve_io`), because a HAP may not exec | `<app data dir>/octos-home/.octos` |
 | iOS | **None.** Providers are still saved; no app gets an assistant | – |
@@ -185,7 +185,7 @@ So a contained app, store or system, reaches the assistant only through `octos.*
 | `octos.*` with arguments beyond the rules | `r.error`: `Unsupported Octos arguments`, or `Provide text (at most 32 KiB)` |
 | `octos.*` with `Policy::contained_apps` off | `r.error`: `The assistant is turned off for apps on this device` |
 | `octos.*` before the person allowed the app's agent | `r.error`: `Waiting for the person to allow this app's agent (OctoSense asks the first time)`, and the shell shows its first-use sheet (read in `contained.rs` and `approvals/mod.rs`; **unverified** in a running shell) |
-| `octos.*` on a desktop without `OCTOS_APP_CORE_BIN` | `r.error`: `no octos kernel: no kernel binary configured (OCTOS_APP_CORE_BIN)` |
+| `octos.*` on a desktop without a packaged kernel or `OCTOS_APP_CORE_BIN` | `r.error`: `no octos kernel: no packaged octos-kernel beside <dir> and no OCTOS_APP_CORE_BIN override; …` (a stale packaged kernel: `no octos kernel: refusing the packaged kernel …`) |
 | `octos.*` in a build that links no kernel (iOS) | `r.error`: `no service answers "octos" on this device` (**unverified**) |
 | `llm.*` from a store app granted `llm` | `llm is for OctoSense's own apps.` |
 | anything in App Hub's `card-host` | `no service answers "<family>" on this device` (`card-host` registers no services) |
@@ -237,7 +237,7 @@ The tracking issue is [#68](https://github.com/OctoSense-org/OctoSense/issues/68
      cargo run --release -p octosense
    ```
 
-   The log says `octos: kernel service ready (starts on first use), core dir …`. Without `OCTOS_APP_CORE_BIN` it says there is no kernel, and AI providers still saves providers.
+   The log says `octos: kernel service ready (starts on first use), core dir …`. Without `OCTOS_APP_CORE_BIN` it uses the packaged `octos-kernel` beside the shell if there is one (`python3 tools/kernel-artifact.py --host --stage target/release`), else says there is no kernel, and AI providers still saves providers.
 
 3. Open **Start → Settings → AI providers**, add a model (family, model, route, key, **Test connection**, save). The profile is `$T/octos-home/.octos/profiles/_main.json`; with the file vault the key is in it, so delete `$T` afterwards.
 4. Use the assistant through a consumer: Rinx (linked by default and in-process; open it from the launcher; sign in to Matrix, allow its agent on the first-use sheet, then use its assistant), or AppCard (`--features app-appcard`). A contained app reaches it through the `octos` host service ([above](#contained-script-apps-system-and-store)); add `OCTOSENSE_CONTAINED_APPS=1` to the command in step 2 and allow the app's agent when the shell asks.
