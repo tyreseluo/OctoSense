@@ -95,8 +95,12 @@ pub struct Sheet {
     pub opened: u64,
 }
 
-/// `os.mail` → `Mail`.
+/// `os.mail` → `Mail`; a native app that names itself, its name (`octobuddy` → `OctoBuddy`).
 pub fn app_label(app: &str) -> String {
+    // A native app may say its own name (`native-apps.json` `name`).
+    if let Some(name) = crate::native_apps::APPS.iter().find(|a| a.id == app).and_then(|a| a.name) {
+        return name.to_string();
+    }
     let id = app.strip_prefix("os.").unwrap_or(app);
     let mut chars = id.chars();
     match chars.next() {

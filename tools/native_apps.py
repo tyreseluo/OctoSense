@@ -72,9 +72,11 @@ BASE_DEFAULT = ["octos-core"]
 # Features on by default in one shell only: the phone offers app agents the
 # system toolbox (ADR 0002 §6), reading pages in its own WebView.
 SHELL_BASE_DEFAULT = {"phone": ["toolbox-peers"]}
-APP_KEYS = {"id", "feature", "crate", "source", "module", "bin", "bin_features", "default_features", "crate_features",
+APP_KEYS = {"id", "name", "feature", "crate", "source", "module", "bin", "bin_features", "default_features", "crate_features",
             "implies", "hosting", "shells", "native_mobile", "sandbox", "storage", "agent"}
-REQUIRED_KEYS = APP_KEYS - {"feature", "bin_features"}
+# `name`: what the person sees ("Ask OctoBuddy", its first-use sheet); without
+# it the shell says the id with a capital ("rinx" -> "Rinx").
+REQUIRED_KEYS = APP_KEYS - {"name", "feature", "bin_features"}
 # The workspace member a process launch selects with the app's crate, so the
 # build gets `bin_features` and the workspace lock (clients.rs `launch_plan`).
 PROCESS_APPS = "crates/process-apps/Cargo.toml"
@@ -122,6 +124,9 @@ def validate(data):
         if missing:
             continue
         ident = app["id"]
+        name = app.get("name")
+        if name is not None and (not isinstance(name, str) or not name.strip() or len(name) > 40 or name != name.strip()):
+            problems.append(f"{where}: name must be a non-empty string of at most 40 characters, without spaces around it")
         if not isinstance(ident, str) or not re.fullmatch(r"[a-z][a-z0-9-]*", ident):
             problems.append(f"{where}: id must be lowercase letters, digits and '-'")
         if ident in seen:
@@ -591,6 +596,8 @@ def render_rust(apps):
         "#[derive(Debug)]",
         "pub struct NativeApp {",
         "    pub id: &'static str,",
+        "    /// What the person sees (`name`); none: the id with a capital.",
+        "    pub name: Option<&'static str>,",
         "    /// The shell's Cargo feature that links it.",
         "    pub feature: &'static str,",
         "    /// The binary a process-hosted instance runs.",
@@ -638,9 +645,11 @@ def render_rust(apps):
         hosting = dict(app["hosting"])
         hosting.setdefault("wasm", "module")
         bin_value = f"Some({s(app['bin'])})" if app["bin"] else "None"
+        name_value = f"Some({s(app['name'])})" if app.get("name") else "None"
         octos = ", ".join(s(x) for x in app["agent"]["octos"])
         out.append("    NativeApp {")
         out.append(f"        id: {s(app['id'])},")
+        out.append(f"        name: {name_value},")
         out.append(f"        feature: {s(feature_of(app))},")
         out.append(f"        bin: {bin_value},")
         for target in TARGETS + ("wasm",):

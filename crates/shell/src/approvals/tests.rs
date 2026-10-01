@@ -1024,3 +1024,12 @@ fn settings_lists_every_app_that_declares_an_agent_before_it_asks() {
     assert!(listed.contains(&("org.example.trip".to_string(), State::Undecided)), "listed before it ever asked: {listed:?}");
     let _ = std::fs::remove_dir_all(&dir);
 }
+
+/// A native app's own name is what the person sees; others, the id with a capital.
+#[test]
+fn an_app_is_called_by_its_name() {
+    use crate::approvals::sheet::app_label;
+    assert_eq!(app_label("octobuddy"), "OctoBuddy");
+    assert_eq!(app_label("rinx"), "Rinx");
+    assert_eq!(app_label("os.mail"), "Mail");
+}

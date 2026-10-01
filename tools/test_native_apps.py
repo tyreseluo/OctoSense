@@ -236,6 +236,15 @@ class Validation(Fixture):
         self.app("reference")["hosted"] = "yes"
         self.assertRefused(r"reference: unknown hosted")
 
+    def test_a_name_is_optional_and_said_as_written(self):
+        self.assertEqual(self.app("octobuddy")["name"], "OctoBuddy")
+        self.assertNotIn("name", self.app("rinx"), "without one the shell says the id with a capital")
+        for bad in ("", " Reference", "x" * 41, 7):
+            self.app("reference")["name"] = bad
+            self.assertRefused(r"reference: name must be a non-empty string")
+        self.app("reference")["name"] = "Reference"
+        native_apps.validate(self.data)
+
 
 class Generation(Fixture):
     def test_a_manifest_change_is_drift_until_regenerated(self):
@@ -246,6 +255,14 @@ class Generation(Fixture):
         self.assertEqual(self.run_main("--check"), 0)
         rust = (self.root / native_apps.RUST_FILE).read_text()
         self.assertIn('bin: Some("terminal"),\n        macos: Hosting::Module,', rust)
+
+    def test_a_name_reaches_the_shell(self):
+        self.app("reference")["name"] = "Reference Desk"
+        self.save()
+        self.assertEqual(self.run_main("--no-lock"), 0)
+        rust = (self.root / native_apps.RUST_FILE).read_text()
+        self.assertIn('id: "reference",\n        name: Some("Reference Desk"),', rust)
+        self.assertIn('id: "rinx",\n        name: None,', rust)
 
     def test_a_hand_edit_inside_a_block_is_drift(self):
         path = self.root / "crates/shell/Cargo.toml"

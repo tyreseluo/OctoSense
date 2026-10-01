@@ -50,6 +50,8 @@ pub enum Network {
 #[derive(Debug)]
 pub struct NativeApp {
     pub id: &'static str,
+    /// What the person sees (`name`); none: the id with a capital.
+    pub name: Option<&'static str>,
     /// The shell's Cargo feature that links it.
     pub feature: &'static str,
     /// The binary a process-hosted instance runs.
@@ -94,6 +96,7 @@ pub struct NativeApp {
 pub const APPS: &[NativeApp] = &[
     NativeApp {
         id: "rinx",
+        name: None,
         feature: "app-rinx",
         bin: None,
         macos: Hosting::Module,
@@ -118,6 +121,7 @@ pub const APPS: &[NativeApp] = &[
     },
     NativeApp {
         id: "reference",
+        name: None,
         feature: "app-reference",
         bin: Some("octosense-reference"),
         macos: Hosting::Module,
@@ -142,6 +146,7 @@ pub const APPS: &[NativeApp] = &[
     },
     NativeApp {
         id: "octobuddy",
+        name: Some("OctoBuddy"),
         feature: "app-octobuddy",
         bin: Some("octosense-octobuddy"),
         macos: Hosting::Module,
@@ -166,6 +171,7 @@ pub const APPS: &[NativeApp] = &[
     },
     NativeApp {
         id: "sheets",
+        name: None,
         feature: "app-sheets",
         bin: Some("sheets"),
         macos: Hosting::Module,
@@ -190,6 +196,7 @@ pub const APPS: &[NativeApp] = &[
     },
     NativeApp {
         id: "terminal",
+        name: None,
         feature: "app-terminal",
         bin: Some("terminal"),
         macos: Hosting::Process,
@@ -216,6 +223,7 @@ pub const APPS: &[NativeApp] = &[
     },
     NativeApp {
         id: "appcard",
+        name: None,
         feature: "app-appcard",
         bin: None,
         macos: Hosting::Module,
@@ -240,6 +248,7 @@ pub const APPS: &[NativeApp] = &[
     },
     NativeApp {
         id: "apphub",
+        name: None,
         feature: "app-hub",
         bin: None,
         macos: Hosting::Module,
