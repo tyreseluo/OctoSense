@@ -20,7 +20,7 @@ Makepad and that no fork is required do not.
 The revision is pinned as a chain, not in one place:
 
 1. `native-runtime.lock.json` here names one revision of
-   `OctoSense-org/Octoscript-Makepad` (`d8bee94c`, Octoscript-Makepad #50).
+   `OctoSense-org/Octoscript-Makepad` (`c29cfb84`, its main: the merge of Octoscript-Makepad #50).
 2. That repo's `runtime.json` names the Makepad fork revision
    (`e29a0eaa`, Makepad main: the enforced isolate policy of PR #22, module
    windows, the ROM's Splash fixes, the contained script apps and host
