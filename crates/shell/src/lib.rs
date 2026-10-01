@@ -71,6 +71,7 @@ pub mod wm_reply;
 pub mod ext;
 pub mod glance;
 pub mod glance_card;
+pub mod glance_digest;
 pub mod glance_panel;
 pub mod system_chat;
 pub use octosense_ai_host as ai_host;

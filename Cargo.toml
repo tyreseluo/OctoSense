@@ -84,16 +84,16 @@ makepad-strict-json = { git = "https://github.com/OctoSense-org/makepad.git", re
 makepad-app-module = { git = "https://github.com/OctoSense-org/makepad.git", rev = "e29a0eaa68781231eb9ec582e5f02648c6dad7e9" }
 makepad-wm-theme = { git = "https://github.com/OctoSense-org/makepad.git", rev = "e29a0eaa68781231eb9ec582e5f02648c6dad7e9" }
 makepad-aichat = { git = "https://github.com/OctoSense-org/makepad.git", rev = "e29a0eaa68781231eb9ec582e5f02648c6dad7e9", default-features = false }
-# --- OctoScript (Octoscript dbd48cfb) and its Makepad runtime
-# (Octoscript-Makepad e0df0b51, native-runtime.lock.json).
-octoscript-ui-l0 = { git = "https://github.com/OctoSense-org/Octoscript.git", rev = "dbd48cfb799551c11e30970c393777d29644a605" }
+# --- OctoScript (Octoscript 30a21b78) and its Makepad runtime
+# (Octoscript-Makepad d8bee94c, native-runtime.lock.json).
+octoscript-ui-l0 = { git = "https://github.com/OctoSense-org/Octoscript.git", rev = "30a21b780ed518acaa3f8fb16dd5cb0b1ca9c9f8" }
 # The bounded VM, capability-leased host modules and executable JSON schemas
 # (the system toolbox's workflow templates, crates/toolbox).
-octoscript-core = { git = "https://github.com/OctoSense-org/Octoscript.git", rev = "dbd48cfb799551c11e30970c393777d29644a605" }
-octoscript-capabilities = { git = "https://github.com/OctoSense-org/Octoscript.git", rev = "dbd48cfb799551c11e30970c393777d29644a605" }
-octoscript-schema = { git = "https://github.com/OctoSense-org/Octoscript.git", rev = "dbd48cfb799551c11e30970c393777d29644a605" }
-octoscript-makepad = { git = "https://github.com/OctoSense-org/Octoscript-Makepad.git", rev = "e0df0b5177f9cb0d8ad0ad0225d40ebcf8389a1b" }
-octoscript-node = { git = "https://github.com/OctoSense-org/Octoscript-Makepad.git", rev = "e0df0b5177f9cb0d8ad0ad0225d40ebcf8389a1b" }
+octoscript-core = { git = "https://github.com/OctoSense-org/Octoscript.git", rev = "30a21b780ed518acaa3f8fb16dd5cb0b1ca9c9f8" }
+octoscript-capabilities = { git = "https://github.com/OctoSense-org/Octoscript.git", rev = "30a21b780ed518acaa3f8fb16dd5cb0b1ca9c9f8" }
+octoscript-schema = { git = "https://github.com/OctoSense-org/Octoscript.git", rev = "30a21b780ed518acaa3f8fb16dd5cb0b1ca9c9f8" }
+octoscript-makepad = { git = "https://github.com/OctoSense-org/Octoscript-Makepad.git", rev = "d8bee94cb2379dbbdbfa07f8c572e6da5b4fdc6d" }
+octoscript-node = { git = "https://github.com/OctoSense-org/Octoscript-Makepad.git", rev = "d8bee94cb2379dbbdbfa07f8c572e6da5b4fdc6d" }
 # --- App Hub's host service registry the Mail and llm services register
 # into; the same revision as App Hub's app crate (a native app, above).
 octosense-appstore = { git = "https://github.com/OctoSense-org/OctoSense-App-Hub", rev = "58c3c8aed8fc811a16d67c5f784a8a44214ff876" }
