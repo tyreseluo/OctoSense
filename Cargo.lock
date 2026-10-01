@@ -2894,8 +2894,8 @@ dependencies = [
  "libc",
  "log",
  "rustversion",
- "windows-link 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "windows-result 0.4.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "windows-link 0.1.3",
+ "windows-result 0.3.4",
 ]
 
 [[package]]
@@ -4216,7 +4216,7 @@ dependencies = [
  "js-sys",
  "log",
  "wasm-bindgen",
- "windows-core 0.62.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "windows-core 0.61.2",
 ]
 
 [[package]]
@@ -7645,7 +7645,7 @@ dependencies = [
 [[package]]
 name = "octosense-octobuddy"
 version = "0.1.0"
-source = "git+https://github.com/tyreseluo/OctoBuddy.git?rev=fad8480efd82672c4e8c824a1e142242084eff14#fad8480efd82672c4e8c824a1e142242084eff14"
+source = "git+https://github.com/tyreseluo/OctoBuddy.git?rev=b448230d9ab45356a6c006622de24c133ee45373#b448230d9ab45356a6c006622de24c133ee45373"
 dependencies = [
  "makepad-app-module",
  "makepad-terminal",
