@@ -7645,8 +7645,9 @@ dependencies = [
 [[package]]
 name = "octosense-octobuddy"
 version = "0.1.0"
-source = "git+https://github.com/tyreseluo/OctoBuddy.git?rev=b448230d9ab45356a6c006622de24c133ee45373#b448230d9ab45356a6c006622de24c133ee45373"
+source = "git+https://github.com/tyreseluo/OctoBuddy.git?rev=29f316fd0fa12694a4b8267117174a4f4acd7045#29f316fd0fa12694a4b8267117174a4f4acd7045"
 dependencies = [
+ "base64 0.22.1",
  "makepad-app-module",
  "makepad-terminal",
  "makepad-widgets",
@@ -7654,6 +7655,7 @@ dependencies = [
  "octosense-app-policy",
  "octosense-llm-config",
  "serde_json",
+ "sha2 0.10.9",
 ]
 
 [[package]]

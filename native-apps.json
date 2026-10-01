@@ -42,7 +42,7 @@
       "id": "octobuddy",
       "name": "OctoBuddy",
       "crate": "octosense-octobuddy",
-      "source": { "git": "https://github.com/tyreseluo/OctoBuddy.git", "rev": "b448230d9ab45356a6c006622de24c133ee45373", "local": null },
+      "source": { "git": "https://github.com/tyreseluo/OctoBuddy.git", "rev": "29f316fd0fa12694a4b8267117174a4f4acd7045", "local": null },
       "module": "octosense_octobuddy::OCTOBUDDY_MODULE",
       "bin": "octosense-octobuddy",
       "default_features": true,
