@@ -31,13 +31,13 @@ class TheRepository(unittest.TestCase):
 
     def test_the_manifest_declares_todays_native_apps(self):
         apps = native_apps.load(ROOT)
-        self.assertEqual([app["id"] for app in apps], ["rinx", "reference", "sheets", "terminal", "appcard", "apphub"])
+        self.assertEqual([app["id"] for app in apps], ["rinx", "reference", "octobuddy", "sheets", "terminal", "appcard", "apphub"])
         hosting = {app["id"]: app["hosting"] for app in apps}
         # Terminal is the only process app for now (ADR 0004 §2).
         self.assertEqual(hosting["terminal"]["macos"], "process")
         self.assertEqual(hosting["terminal"]["windows"], "process")
         self.assertEqual(hosting["terminal"]["linux"], "process-if-vulkan")
-        for ident in ("apphub", "rinx", "sheets", "reference", "appcard"):
+        for ident in ("apphub", "rinx", "sheets", "reference", "octobuddy", "appcard"):
             self.assertEqual(set(hosting[ident].values()), {"module"}, ident)
         # Non-Vulkan Linux is in-process for everything.
         for ident, h in hosting.items():
@@ -268,7 +268,7 @@ class Generation(Fixture):
         self.assertIn('makepad-notes = { workspace = true, optional = true }', shell)
         self.assertIn('app-notes = ["dep:makepad-notes"]', shell)
         desktop = (self.root / "desktop/Cargo.toml").read_text()
-        self.assertIn('default = ["octos-core", "app-rinx", "app-terminal", "app-hub", "app-notes"]', desktop)
+        self.assertIn('default = ["octos-core", "app-rinx", "app-octobuddy", "app-terminal", "app-hub", "app-notes"]', desktop)
         self.assertIn('app-notes = ["octosense-shell/app-notes"]', desktop)
         self.assertNotIn("app-notes", (self.root / "phone/Cargo.toml").read_text())
         rust = (self.root / native_apps.RUST_FILE).read_text()

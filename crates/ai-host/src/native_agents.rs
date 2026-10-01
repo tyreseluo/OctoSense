@@ -7,4 +7,5 @@
 /// (app id, the `octos.*` services its agent is granted).
 pub const NATIVE_AGENTS: &[(&str, &[&str])] = &[
     ("rinx", &["octos.session.open", "octos.session.history", "octos.turn.start", "octos.turn.interrupt"]),
+    ("octobuddy", &["octos.session.open", "octos.session.history", "octos.turn.start", "octos.turn.interrupt"]),
 ];

@@ -104,15 +104,19 @@ fn rinx_is_granted_before_start() {
     assert!(offered.finish().is_some());
 }
 
-/// The shipped policy grants Rinx exactly the assistant services, and it
-/// comes from `native-apps.json` (the generated `native_agents`), not code.
+/// The shipped policy grants Rinx (and OctoBuddy) exactly the assistant
+/// services, and it comes from `native-apps.json` (the generated
+/// `native_agents`), not code.
 #[test]
 fn the_shipped_policy_grants_rinx_the_assistant() {
     let policy = Policy::shipped();
     let grants: Vec<_> = policy.grants().collect();
-    assert_eq!(grants.len(), 1);
-    assert_eq!(grants[0].0, "rinx");
-    assert_eq!(grants[0].1, octosense_app_peers::OCTOS_SERVICES.map(String::from));
+    // Rinx and OctoBuddy, each the assistant services exactly.
+    let apps: Vec<&str> = grants.iter().map(|g| g.0).collect();
+    assert_eq!(apps, ["rinx", "octobuddy"]);
+    for grant in &grants {
+        assert_eq!(grant.1, octosense_app_peers::OCTOS_SERVICES.map(String::from), "{}", grant.0);
+    }
     assert!(Policy::none().grants().next().is_none());
     let generated: Vec<(&str, Vec<String>)> = crate::native_agents::NATIVE_AGENTS.iter().map(|(app, s)| (*app, s.iter().map(|s| s.to_string()).collect())).collect();
     let shipped: Vec<(&str, Vec<String>)> = policy.grants().map(|(app, s)| (app, s.to_vec())).collect();

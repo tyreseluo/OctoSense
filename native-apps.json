@@ -39,6 +39,29 @@
       "agent": { "octos": [], "tools": null }
     },
     {
+      "id": "octobuddy",
+      "crate": "octosense-octobuddy",
+      "source": { "git": "https://github.com/tyreseluo/OctoBuddy.git", "rev": "fad8480efd82672c4e8c824a1e142242084eff14", "local": null },
+      "module": "octosense_octobuddy::OCTOBUDDY_MODULE",
+      "bin": "octosense-octobuddy",
+      "default_features": true,
+      "crate_features": [],
+      "implies": [],
+      "hosting": { "macos": "module", "windows": "module", "linux": "module", "android": "module", "ios": "module", "ohos": "module" },
+      "shells": { "desktop": "default", "phone": "off" },
+      "native_mobile": "feature",
+      "sandbox": { "network": "any", "processes": true },
+      "storage": { "accounts": false, "agent_workspace": "account", "external": [] },
+      "agent": {
+        "octos": ["octos.session.open", "octos.session.history", "octos.turn.start", "octos.turn.interrupt"],
+        "tools": [
+          {"name": "octobuddy.status", "description": "What OctoBuddy is doing now: its projects and sessions, each session's outer loop (what it does, its cost, what waits for it) and its inner loops (role, status, estimate and steps used, cost, the outer loop's verdict). Optionally only one project, by name.", "input_schema": {"type": "object", "properties": {"project": {"type": "string", "maxLength": 200}}, "additionalProperties": false}, "risk": "read", "shareable": true},
+          {"name": "octobuddy.send", "description": "Send a message to the outer loop of one OctoBuddy session, as the person would from its composer; it waits in the session's queue while the outer loop is busy. The session is named by its id or by words of its title.", "input_schema": {"type": "object", "properties": {"session": {"type": "string", "maxLength": 200}, "message": {"type": "string", "minLength": 1, "maxLength": 8000}}, "required": ["session", "message"], "additionalProperties": false}, "risk": "act", "confirm": "host", "shareable": true}
+        ],
+        "generic_tools": ["read_file", "write_file", "edit_file", "glob", "grep", "list_dir", "web_search", "web_fetch", "view_image", "ask_user_question", "memory_search", "save_memory"], "grants": [{"app": "terminal", "tool": "terminal.run"}]
+      }
+    },
+    {
       "id": "sheets",
       "crate": "makepad-sheets",
       "source": { "git": "https://github.com/OctoSense-org/makepad.git", "rev": "e29a0eaa68781231eb9ec582e5f02648c6dad7e9", "local": ".sources/makepad/apps/sheets" },

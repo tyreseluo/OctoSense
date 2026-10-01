@@ -141,6 +141,30 @@ pub const APPS: &[NativeApp] = &[
         calls_per_day: None,
     },
     NativeApp {
+        id: "octobuddy",
+        feature: "app-octobuddy",
+        bin: Some("octosense-octobuddy"),
+        macos: Hosting::Module,
+        windows: Hosting::Module,
+        linux: Hosting::Module,
+        android: Hosting::Module,
+        ios: Hosting::Module,
+        ohos: Hosting::Module,
+        wasm: Hosting::Module,
+        octos: &["octos.session.open", "octos.session.history", "octos.turn.start", "octos.turn.interrupt"],
+        tools: &[],
+        network: Network::Any,
+        processes: true,
+        accounts: false,
+        external: &[],
+        storage: r#"{"accounts": false, "agent_workspace": "account", "external": []}"#,
+        tools_json: r##"[{"name":"octobuddy.status","description":"What OctoBuddy is doing now: its projects and sessions, each session's outer loop (what it does, its cost, what waits for it) and its inner loops (role, status, estimate and steps used, cost, the outer loop's verdict). Optionally only one project, by name.","input_schema":{"type":"object","properties":{"project":{"type":"string","maxLength":200}},"additionalProperties":false},"risk":"read","shareable":true},{"name":"octobuddy.send","description":"Send a message to the outer loop of one OctoBuddy session, as the person would from its composer; it waits in the session's queue while the outer loop is busy. The session is named by its id or by words of its title.","input_schema":{"type":"object","properties":{"session":{"type":"string","maxLength":200},"message":{"type":"string","minLength":1,"maxLength":8000}},"required":["session","message"],"additionalProperties":false},"risk":"act","confirm":"host","shareable":true}]"##,
+        generic_tools: &["read_file", "write_file", "edit_file", "glob", "grep", "list_dir", "web_search", "web_fetch", "view_image", "ask_user_question", "memory_search", "save_memory"],
+        grants: &[("terminal", "terminal.run")],
+        calls_per_turn: None,
+        calls_per_day: None,
+    },
+    NativeApp {
         id: "sheets",
         feature: "app-sheets",
         bin: Some("sheets"),
@@ -279,6 +303,7 @@ pub fn find(id: &str) -> Option<&'static NativeApp> {
 pub fn package_of(id: &str) -> Option<&'static str> {
     match id {
         "reference" => Some("octosense-reference"),
+        "octobuddy" => Some("octosense-octobuddy"),
         "sheets" => Some("makepad-sheets"),
         "terminal" => Some("makepad-terminal"),
         _ => None,
@@ -292,6 +317,8 @@ pub fn link(out: &mut Vec<&'static dyn AppModule>) {
     out.push(&rinx::module::RINX_MODULE);
     #[cfg(any(feature = "app-reference", native_mobile))]
     out.push(&octosense_reference::REFERENCE_MODULE);
+    #[cfg(feature = "app-octobuddy")]
+    out.push(&octosense_octobuddy::OCTOBUDDY_MODULE);
     #[cfg(any(feature = "app-sheets", native_mobile))]
     out.push(&makepad_sheets::SHEETS_MODULE);
     #[cfg(feature = "app-terminal")]
