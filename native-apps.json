@@ -42,7 +42,7 @@
       "id": "octobuddy",
       "name": "OctoBuddy",
       "crate": "octosense-octobuddy",
-      "source": { "git": "https://github.com/tyreseluo/OctoBuddy.git", "rev": "59c20735a79e68945b2cd922ab95e092138177c1", "local": null },
+      "source": { "git": "https://github.com/tyreseluo/OctoBuddy.git", "rev": "a072d8324493c924eb451980ba54d120976d06b4", "local": null },
       "module": "octosense_octobuddy::OCTOBUDDY_MODULE",
       "bin": "octosense-octobuddy",
       "default_features": true,
@@ -56,8 +56,9 @@
       "agent": {
         "octos": ["octos.session.open", "octos.session.history", "octos.turn.start", "octos.turn.interrupt"],
         "tools": [
-          {"name": "octobuddy.status", "description": "What OctoBuddy is doing now: its projects and sessions, each session's outer loop (what it does, its cost, what waits for it) and its inner loops (role, status, estimate and steps used, cost, the outer loop's verdict). Optionally only one project, by name.", "input_schema": {"type": "object", "properties": {"project": {"type": "string", "maxLength": 200}}, "additionalProperties": false}, "risk": "read", "shareable": true},
-          {"name": "octobuddy.send", "description": "Send a message to the outer loop of one OctoBuddy session, as the person would from its composer; it waits in the session's queue while the outer loop is busy. The session is named by its id or by words of its title.", "input_schema": {"type": "object", "properties": {"session": {"type": "string", "maxLength": 200}, "message": {"type": "string", "minLength": 1, "maxLength": 8000}}, "required": ["session", "message"], "additionalProperties": false}, "risk": "act", "confirm": "host", "shareable": true}
+          {"name": "octobuddy.status", "description": "What OctoBuddy is doing now: its projects and sessions, each session's outer loop (what it does, its cost, what waits for it) and its inner loops (role, status, estimate and steps used, cost, the outer loop's verdict). Its published apps as its Live page has them (live.apps: each app's published version, whether it is watched and its health, an open incident with what is wrong and what was done, the last report). Optionally only one project, by name.", "input_schema": {"type": "object", "properties": {"project": {"type": "string", "maxLength": 200}}, "additionalProperties": false}, "risk": "read", "shareable": true},
+          {"name": "octobuddy.send", "description": "Send a message to the outer loop of one OctoBuddy session, as the person would from its composer; it waits in the session's queue while the outer loop is busy. The session is named by its id or by words of its title.", "input_schema": {"type": "object", "properties": {"session": {"type": "string", "maxLength": 200}, "message": {"type": "string", "minLength": 1, "maxLength": 8000}}, "required": ["session", "message"], "additionalProperties": false}, "risk": "act", "confirm": "host", "shareable": true},
+          {"name": "octobuddy.report", "description": "Report a problem with an app OctoBuddy built and published (the person says it is broken, or another app saw it fail). Call it first, before checking anything yourself: OctoBuddy runs the published version on this device at once (no need to fetch its API or run anything) and keeps watching it; the reply says whether that run found the problem and what was on screen, and the app's OctoBuddy session hears it. Repairing it stays the person's choice in OctoBuddy (its Live page). The app is named by its name or id.", "input_schema": {"type": "object", "properties": {"app": {"type": "string", "minLength": 1, "maxLength": 200}, "problem": {"type": "string", "minLength": 1, "maxLength": 2000}, "from": {"type": "string", "maxLength": 200}}, "required": ["app", "problem"], "additionalProperties": false}, "risk": "act", "confirm": "host", "shareable": true}
         ],
         "generic_tools": ["read_file", "write_file", "edit_file", "glob", "grep", "list_dir", "web_search", "web_fetch", "view_image", "ask_user_question", "memory_search", "save_memory"], "grants": [{"app": "terminal", "tool": "terminal.run"}]
       }

@@ -421,8 +421,8 @@ fn the_shipped_catalog_offers_the_terminals_run_to_those_granted_it() {
     let run = catalog.entry("terminal", TERMINAL_RUN).unwrap();
     assert_eq!((run["risk"].as_str(), run["confirm"].as_str()), (Some("destructive"), Some("host")));
     assert!(catalog.declarations("rinx", false).is_empty(), "nobody gets it without a grant");
-    // The Terminal's three and OctoBuddy's two (`octobuddy.status`, `octobuddy.send`).
-    assert_eq!(catalog.declarations("rinx", true).len(), 5, "developer mode grants every shareable tool");
+    // The Terminal's three and OctoBuddy's three (`octobuddy.status`, `octobuddy.send`, `octobuddy.report`).
+    assert_eq!(catalog.declarations("rinx", true).len(), 6, "developer mode grants every shareable tool");
 }
 
 /// G3: the native apps' agent blocks (`native-apps.json`) are the shipped
@@ -517,7 +517,7 @@ fn a_peer_is_offered_exactly_its_granted_toolbox_tools_marked_with_their_owner_a
     // No grant, no toolbox tools; developer mode does not invent a grant
     // (the toolbox needs its scope), though it grants other shareable tools.
     assert!(offered_names(&relay, "calendar", false, true).is_empty());
-    assert_eq!(offered_names(&relay, "calendar", true, true), [super::relay::DEV_RUN, "octobuddy.send", "octobuddy.status", "terminal.read_screen", "terminal.read_scrollback", TERMINAL_RUN]);
+    assert_eq!(offered_names(&relay, "calendar", true, true), [super::relay::DEV_RUN, "octobuddy.report", "octobuddy.send", "octobuddy.status", "terminal.read_screen", "terminal.read_scrollback", TERMINAL_RUN]);
 }
 
 #[test]
