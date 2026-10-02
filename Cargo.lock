@@ -7645,7 +7645,7 @@ dependencies = [
 [[package]]
 name = "octosense-octobuddy"
 version = "0.1.0"
-source = "git+https://github.com/tyreseluo/OctoBuddy.git?rev=daa8c83524fa02567b3f55ec949e20bf10b1671c#daa8c83524fa02567b3f55ec949e20bf10b1671c"
+source = "git+https://github.com/tyreseluo/OctoBuddy.git?rev=4d164e4522e4bd7a93dc99f6a9a5a4ae0ba90b64#4d164e4522e4bd7a93dc99f6a9a5a4ae0ba90b64"
 dependencies = [
  "base64 0.22.1",
  "makepad-app-module",
@@ -7664,7 +7664,6 @@ version = "0.1.0"
 dependencies = [
  "makepad-sheets",
  "makepad-terminal",
- "octosense-octobuddy",
  "octosense-reference",
 ]
 

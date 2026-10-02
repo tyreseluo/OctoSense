@@ -148,7 +148,7 @@ pub const APPS: &[NativeApp] = &[
         id: "octobuddy",
         name: Some("OctoBuddy"),
         feature: "app-octobuddy",
-        bin: Some("octosense-octobuddy"),
+        bin: None,
         macos: Hosting::Module,
         windows: Hosting::Module,
         linux: Hosting::Module,
@@ -312,7 +312,6 @@ pub fn find(id: &str) -> Option<&'static NativeApp> {
 pub fn package_of(id: &str) -> Option<&'static str> {
     match id {
         "reference" => Some("octosense-reference"),
-        "octobuddy" => Some("octosense-octobuddy"),
         "sheets" => Some("makepad-sheets"),
         "terminal" => Some("makepad-terminal"),
         _ => None,
